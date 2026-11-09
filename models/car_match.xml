@@ -1,0 +1,113 @@
+<mujoco model="two car players — bounded mechanical strokes, uncalibrated contacts">
+  <compiler angle="radian" autolimits="true" />
+  <option timestep="0.000125" gravity="0 -9.81 0" integrator="implicitfast" cone="elliptic" iterations="100" tolerance="1e-10" density="1.225" viscosity="0.0000181">
+    <flag energy="enable" refsafe="disable" />
+  </option>
+  <default>
+    <geom contype="0" conaffinity="0" rgba="0.7 0.7 0.7 1" />
+    <joint damping="0.05" armature="0.002" />
+  </default>
+  <worldbody>
+    <geom name="court" type="plane" size="9 18 .1" quat=".7071067812 -.7071067812 0 0" />
+    <geom name="net" type="box" pos="0 .457 0" size="5.485 .457 .015" />
+    <body name="chassis" pos="0 .25 8" quat="1 0 0 0">
+      <inertial pos="0 0 0" mass="20" diaginertia="2.6666667 1.6666667 2.6666667" />
+      <joint name="movement_x" type="slide" axis="1 0 0" range="-5.8 5.8" damping="0" armature="0" />
+      <joint name="movement_z" type="slide" axis="0 0 1" range="-7.25 5.5" damping="0" armature="0" />
+      <geom name="chassis_shape" type="box" size=".36 .14 .48" rgba=".14 .48 .72 1" />
+      <geom type="cylinder" pos="-0.36 -.1 -0.3" size=".14 .045" quat=".7071067812 0 .7071067812 0" rgba=".10 .11 .12 1" />
+      <geom type="cylinder" pos="-0.36 -.1 0.3" size=".14 .045" quat=".7071067812 0 .7071067812 0" rgba=".10 .11 .12 1" />
+      <geom type="cylinder" pos="0.36 -.1 -0.3" size=".14 .045" quat=".7071067812 0 .7071067812 0" rgba=".10 .11 .12 1" />
+      <geom type="cylinder" pos="0.36 -.1 0.3" size=".14 .045" quat=".7071067812 0 .7071067812 0" rgba=".10 .11 .12 1" />
+      <geom name="mast" type="capsule" fromto="0 .14 0 0 .65 0" size=".04" />
+      <body name="boom" pos="0 .65 0">
+        <joint name="lift" axis="0 0 1" range="-1.72 1.72" />
+        <joint name="swing" axis="0 1 0" range="-1.1 4.25" />
+        <geom name="shaft" type="capsule" fromto="0 0 0 .45 0 0" size=".018" mass=".4" />
+        <body name="grip" pos=".45 0 0">
+          <joint name="tilt" axis="1 0 0" range="-.5 .5" />
+          <body name="racket">
+            <!-- Game proxy: contact width is enlarged 40%; mass, COM and inertia
+                 retain their original uncalibrated values, independent of geometry. -->
+            <inertial pos=".30 0 0" mass=".32" diaginertia=".003 .014 .015" />
+            <geom name="racket_handle" type="capsule" fromto="0 0 0 .24 0 0" size=".015" />
+            <geom name="stringbed" type="box" pos=".43 0 0" size=".18 .175 .004" rgba=".7 .85 .9 .3" />
+            <geom name="racket_frame_top" type="capsule" fromto=".25 .182 0 .61 .182 0" size=".008" />
+            <geom name="racket_frame_bottom" type="capsule" fromto=".25 -.182 0 .61 -.182 0" size=".008" />
+            <geom name="racket_frame_tip" type="capsule" fromto=".61 -.182 0 .61 .182 0" size=".008" />
+            <geom name="racket_frame_throat" type="capsule" fromto=".25 -.182 0 .25 .182 0" size=".008" />
+          </body>
+        </body>
+      </body>
+    </body>
+    <body name="player1_chassis" pos="0 .25 -8" quat="0 0 1 0">
+      <inertial pos="0 0 0" mass="20" diaginertia="2.6666667 1.6666667 2.6666667" />
+      <joint name="player1_movement_x" type="slide" axis="-1 0 0" range="-5.8 5.8" damping="0" armature="0" />
+      <joint name="player1_movement_z" type="slide" axis="0 0 -1" range="-5.5 7.25" damping="0" armature="0" />
+      <geom name="player1_chassis_shape" type="box" size=".36 .14 .48" rgba=".9 .38 .15 1" />
+      <geom type="cylinder" pos="-0.36 -.1 -0.3" size=".14 .045" quat=".7071067812 0 .7071067812 0" rgba=".10 .11 .12 1" />
+      <geom type="cylinder" pos="-0.36 -.1 0.3" size=".14 .045" quat=".7071067812 0 .7071067812 0" rgba=".10 .11 .12 1" />
+      <geom type="cylinder" pos="0.36 -.1 -0.3" size=".14 .045" quat=".7071067812 0 .7071067812 0" rgba=".10 .11 .12 1" />
+      <geom type="cylinder" pos="0.36 -.1 0.3" size=".14 .045" quat=".7071067812 0 .7071067812 0" rgba=".10 .11 .12 1" />
+      <geom name="player1_mast" type="capsule" fromto="0 .14 0 0 .65 0" size=".04" />
+      <body name="player1_boom" pos="0 .65 0">
+        <joint name="player1_lift" axis="0 0 1" range="-1.72 1.72" />
+        <joint name="player1_swing" axis="0 1 0" range="-1.1 4.25" />
+        <geom name="player1_shaft" type="capsule" fromto="0 0 0 .45 0 0" size=".018" mass=".4" />
+        <body name="player1_grip" pos=".45 0 0">
+          <joint name="player1_tilt" axis="1 0 0" range="-.5 .5" />
+          <body name="player1_racket">
+            <inertial pos=".30 0 0" mass=".32" diaginertia=".003 .014 .015" />
+            <geom name="player1_racket_handle" type="capsule" fromto="0 0 0 .24 0 0" size=".015" />
+            <geom name="player1_stringbed" type="box" pos=".43 0 0" size=".18 .175 .004" rgba=".7 .85 .9 .3" />
+            <geom name="player1_racket_frame_top" type="capsule" fromto=".25 .182 0 .61 .182 0" size=".008" />
+            <geom name="player1_racket_frame_bottom" type="capsule" fromto=".25 -.182 0 .61 -.182 0" size=".008" />
+            <geom name="player1_racket_frame_tip" type="capsule" fromto=".61 -.182 0 .61 .182 0" size=".008" />
+            <geom name="player1_racket_frame_throat" type="capsule" fromto=".25 -.182 0 .25 .182 0" size=".008" />
+          </body>
+        </body>
+      </body>
+    </body>
+    <body name="ball" pos="1.21 1.78 3.5">
+      <freejoint name="ball_free" />
+      <inertial pos="0 0 0" mass=".057" diaginertia=".000041382 .000041382 .000041382" />
+      <geom name="ball_geom" type="sphere" size=".033" rgba=".8 1 .05 1" fluidshape="ellipsoid" fluidcoef=".2535 .25 1 1 1" />
+    </body>
+  </worldbody>
+  <contact>
+    <pair geom1="ball_geom" geom2="stringbed" condim="3" friction=".7 .7 .001 .0001 .0001" solref="-500000 -50" solimp=".95 .95 .001" />
+    <pair geom1="ball_geom" geom2="court" condim="3" friction=".6 .6 .001 .0001 .0001" solref="-80000 -70" solimp=".95 .95 .001" />
+    <pair geom1="ball_geom" geom2="net" condim="3" friction=".4 .4 .001 .0001 .0001" solref="-3000 -80" solimp=".95 .95 .001" />
+    <pair geom1="ball_geom" geom2="racket_frame_top" condim="3" friction=".3 .3 .001 .0001 .0001" solref="-100000 -80" />
+    <pair geom1="ball_geom" geom2="racket_frame_bottom" condim="3" friction=".3 .3 .001 .0001 .0001" solref="-100000 -80" />
+    <pair geom1="ball_geom" geom2="racket_frame_tip" condim="3" friction=".3 .3 .001 .0001 .0001" solref="-100000 -80" />
+    <pair geom1="ball_geom" geom2="racket_frame_throat" condim="3" friction=".3 .3 .001 .0001 .0001" solref="-100000 -80" />
+    <pair geom1="ball_geom" geom2="player1_stringbed" condim="3" friction=".7 .7 .001 .0001 .0001" solref="-500000 -50" solimp=".95 .95 .001" />
+    <pair geom1="ball_geom" geom2="player1_racket_frame_top" condim="3" friction=".3 .3 .001 .0001 .0001" solref="-100000 -80" />
+    <pair geom1="ball_geom" geom2="player1_racket_frame_bottom" condim="3" friction=".3 .3 .001 .0001 .0001" solref="-100000 -80" />
+    <pair geom1="ball_geom" geom2="player1_racket_frame_tip" condim="3" friction=".3 .3 .001 .0001 .0001" solref="-100000 -80" />
+    <pair geom1="ball_geom" geom2="player1_racket_frame_throat" condim="3" friction=".3 .3 .001 .0001 .0001" solref="-100000 -80" />
+  </contact>
+  <actuator>
+    <motor name="movement_x_motor" joint="movement_x" ctrlrange="-700 700" />
+    <motor name="movement_z_motor" joint="movement_z" ctrlrange="-700 700" />
+    <motor name="swing_motor" joint="swing" ctrlrange="-40 40" />
+    <motor name="lift_motor" joint="lift" ctrlrange="-40 40" />
+    <motor name="tilt_motor" joint="tilt" ctrlrange="-6 6" />
+    <motor name="player1_movement_x_motor" joint="player1_movement_x" ctrlrange="-700 700" />
+    <motor name="player1_movement_z_motor" joint="player1_movement_z" ctrlrange="-700 700" />
+    <motor name="player1_swing_motor" joint="player1_swing" ctrlrange="-40 40" />
+    <motor name="player1_lift_motor" joint="player1_lift" ctrlrange="-40 40" />
+    <motor name="player1_tilt_motor" joint="player1_tilt" ctrlrange="-6 6" />
+  </actuator>
+  <custom>
+    <text name="controller_joints" data="swing tilt lift" />
+    <text name="player_bodies" data="chassis boom grip racket" />
+    <numeric name="controller_kp" data="180 30 180" />
+    <numeric name="controller_kd" data="12 1 12" />
+    <numeric name="controller_rates" data="16 6 16" />
+  </custom>
+  <keyframe>
+    <key name="ready" qpos="0 0 0 1.5707963267948966 0 0 0 0 1.5707963267948966 0 0 .1 17 1 0 0 0" />
+  </keyframe>
+</mujoco>

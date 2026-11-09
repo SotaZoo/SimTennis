@@ -1,0 +1,15 @@
+.DS_Store
+.scratch/
+.venv
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+godot/.godot/
+godot/bin/
+godot/models/
+godot/local/
+godot/assets/
+*.log
+MUJOCO_LOG.TXT

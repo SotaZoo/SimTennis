@@ -1,0 +1,81 @@
+<mujoco model="supported tennis arm — uncalibrated integration model">
+  <compiler angle="radian" autolimits="true"/>
+  <option timestep="0.000125" gravity="0 -9.81 0" integrator="implicitfast"
+          cone="elliptic" iterations="100" tolerance="1e-10" density="1.225" viscosity="0.0000181">
+    <flag energy="enable" refsafe="disable"/>
+  </option>
+  <!-- Coefficients below are declared baseline approximations, not identified
+       properties of a real ball/stringbed/player. No visual mesh sets inertia. -->
+  <default>
+    <geom contype="0" conaffinity="0" rgba="0.7 0.7 0.7 1"/>
+    <joint damping="0.05" armature="0.002"/>
+  </default>
+  <worldbody>
+    <geom name="court" type="plane" size="9 18 .1" quat=".7071067812 -.7071067812 0 0"/>
+    <geom name="net" type="box" pos="0 .457 0" size="5.485 .457 .015"/>
+    <!-- Torso support is fixed and must remain visible in inspection mode. -->
+    <body name="torso" pos=".2 1.45 7.8">
+      <geom name="support" type="capsule" fromto="0 -.95 0 0 0 0" size=".10"/>
+      <body name="upper_arm">
+        <joint name="shoulder_yaw" axis="0 1 0" range="-1.3 1.3"/>
+        <joint name="shoulder_pitch" axis="0 0 1" range="-1.4 .8"/>
+        <joint name="shoulder_axial" axis="1 0 0" range="-1.2 1.2"/>
+        <inertial pos=".15 0 0" mass="1.8" diaginertia=".003 .018 .018"/>
+        <geom name="upper_arm_shape" type="capsule" fromto="0 0 0 .30 0 0" size=".045"/>
+        <body name="forearm" pos=".30 0 0">
+          <joint name="elbow" axis="0 1 0" range="0 2.269"/>
+          <joint name="forearm_roll" axis="1 0 0" range="-.7853981633974483 .7853981633974483"/>
+          <inertial pos=".14 0 0" mass="1.1" diaginertia=".002 .009 .009"/>
+          <geom name="forearm_shape" type="capsule" fromto="0 0 0 .28 0 0" size=".035"/>
+          <!-- Effective hand mass at the grip: finite ellipsoid inertia,
+               no extra reach. This is not an anatomical hand/grip model. -->
+          <body name="hand" pos=".28 0 0">
+            <joint name="wrist_bend" axis="0 1 0" range="-.5235987755982988 .5235987755982988"/>
+            <inertial pos="0 0 0" mass=".16" diaginertia=".0000328 .0000928 .0001000"/>
+            <body name="racket" quat=".984807753 .173648178 0 0">
+              <!-- Racket body origin is the grip. COM is .30m beyond it; the
+                   explicit diagonal is at COM, in racket principal axes. -->
+              <inertial pos=".30 0 0" mass=".32" diaginertia=".003 .014 .015"/>
+              <geom name="racket_handle" type="capsule" fromto="0 0 0 .24 0 0" size=".015"/>
+              <geom name="stringbed" type="box" pos=".43 0 0" size=".18 .125 .004" rgba=".7 .85 .9 .3"/>
+              <geom name="racket_frame_top" type="capsule" fromto=".25 .13 0 .61 .13 0" size=".008"/>
+              <geom name="racket_frame_bottom" type="capsule" fromto=".25 -.13 0 .61 -.13 0" size=".008"/>
+              <geom name="racket_frame_tip" type="capsule" fromto=".61 -.13 0 .61 .13 0" size=".008"/>
+              <geom name="racket_frame_throat" type="capsule" fromto=".25 -.13 0 .25 .13 0" size=".008"/>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+    <body name="ball" pos="1.21 1.78 3.5">
+      <freejoint name="ball_free"/>
+      <!-- Thin-shell inertia 2/3*m*r^2; a declared approximation for this slice. -->
+      <inertial pos="0 0 0" mass=".057" diaginertia=".000041382 .000041382 .000041382"/>
+      <geom name="ball_geom" type="sphere" size=".033" rgba=".8 1 .05 1"
+            fluidshape="ellipsoid" fluidcoef=".2535 .25 1 1 1"/>
+    </body>
+  </worldbody>
+  <contact>
+    <pair geom1="ball_geom" geom2="stringbed" condim="3" friction=".7 .7 .001 .0001 .0001"
+          solref="-500000 -50" solimp=".95 .95 .001"/>
+    <pair geom1="ball_geom" geom2="court" condim="3" friction=".6 .6 .001 .0001 .0001"
+          solref="-80000 -70" solimp=".95 .95 .001"/>
+    <pair geom1="ball_geom" geom2="net" condim="3" friction=".4 .4 .001 .0001 .0001"
+          solref="-3000 -80" solimp=".95 .95 .001"/>
+    <pair geom1="ball_geom" geom2="racket_frame_top" condim="3" friction=".3 .3 .001 .0001 .0001" solref="-100000 -80"/>
+    <pair geom1="ball_geom" geom2="racket_frame_bottom" condim="3" friction=".3 .3 .001 .0001 .0001" solref="-100000 -80"/>
+    <pair geom1="ball_geom" geom2="racket_frame_tip" condim="3" friction=".3 .3 .001 .0001 .0001" solref="-100000 -80"/>
+    <pair geom1="ball_geom" geom2="racket_frame_throat" condim="3" friction=".3 .3 .001 .0001 .0001" solref="-100000 -80"/>
+  </contact>
+  <actuator>
+    <motor name="shoulder_yaw_motor" joint="shoulder_yaw" ctrlrange="-65 65"/>
+    <motor name="shoulder_pitch_motor" joint="shoulder_pitch" ctrlrange="-65 65"/>
+    <motor name="elbow_motor" joint="elbow" ctrlrange="-40 40"/>
+    <motor name="shoulder_axial_motor" joint="shoulder_axial" ctrlrange="-20 20"/>
+    <motor name="forearm_roll_motor" joint="forearm_roll" ctrlrange="-8 8"/>
+    <motor name="wrist_bend_motor" joint="wrist_bend" ctrlrange="-6 6"/>
+  </actuator>
+  <keyframe>
+    <key name="ready" qvel="0 0 0 0 0 0 0 0 18 0 0 0"/>
+  </keyframe>
+</mujoco>

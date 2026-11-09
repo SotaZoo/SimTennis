@@ -1,0 +1,122 @@
+<mujoco model="two supported players — assisted movement, uncalibrated contact">
+  <!-- Independent match scenario derived from supported_arm.xml. Arm geometry,
+       ball inertia, air and contact pairs retain the fixture parameters.
+       Two finite 60 kg planar supports replace fixed torso supports; legs,
+       balance and orientation remain assisted. See research/BATCH4_MOVEMENT.md. -->
+  <compiler angle="radian" autolimits="true" />
+  <option timestep="0.000125" gravity="0 -9.81 0" integrator="implicitfast" cone="elliptic" iterations="100" tolerance="1e-10" density="1.225" viscosity="0.0000181">
+    <flag energy="enable" refsafe="disable" />
+  </option>
+  <default>
+    <geom contype="0" conaffinity="0" rgba="0.7 0.7 0.7 1" />
+    <joint damping="0.05" armature="0.002" />
+  </default>
+  <worldbody>
+    <geom name="court" type="plane" size="9 18 .1" quat=".7071067812 -.7071067812 0 0" />
+    <geom name="net" type="box" pos="0 .457 0" size="5.485 .457 .015" />
+    <body name="torso" pos=".2 1.45 7.8">
+      <joint name="movement_x" type="slide" axis="1 0 0" range="-5.4 5.0" damping="0" armature="0" />
+      <joint name="movement_z" type="slide" axis="0 0 1" range="-7.15 5.085" damping="0" armature="0" />
+      <geom name="support" type="capsule" fromto="0 -.95 0 0 0 0" size=".10" />
+      <body name="upper_arm">
+        <joint name="shoulder_yaw" axis="0 1 0" range="-1.3 1.3" />
+        <joint name="shoulder_pitch" axis="0 0 1" range="-1.4 .8" />
+        <joint name="shoulder_axial" axis="1 0 0" range="-1.2 1.2" />
+        <inertial pos=".15 0 0" mass="1.8" diaginertia=".003 .018 .018" />
+        <geom name="upper_arm_shape" type="capsule" fromto="0 0 0 .30 0 0" size=".045" />
+        <body name="forearm" pos=".30 0 0">
+          <joint name="elbow" axis="0 1 0" range="0 2.269" />
+          <joint name="forearm_roll" axis="1 0 0" range="-.7853981633974483 .7853981633974483" />
+          <inertial pos=".14 0 0" mass="1.1" diaginertia=".002 .009 .009" />
+          <geom name="forearm_shape" type="capsule" fromto="0 0 0 .28 0 0" size=".035" />
+          <body name="hand" pos=".28 0 0">
+            <joint name="wrist_bend" axis="0 1 0" range="-.5235987755982988 .5235987755982988" />
+            <inertial pos="0 0 0" mass=".16" diaginertia=".0000328 .0000928 .0001000" />
+            <body name="racket" quat=".984807753 .173648178 0 0">
+              <inertial pos=".30 0 0" mass=".32" diaginertia=".003 .014 .015" />
+              <geom name="racket_handle" type="capsule" fromto="0 0 0 .24 0 0" size=".015" />
+              <geom name="stringbed" type="box" pos=".43 0 0" size=".18 .125 .004" rgba=".7 .85 .9 .3" />
+              <geom name="racket_frame_top" type="capsule" fromto=".25 .13 0 .61 .13 0" size=".008" />
+              <geom name="racket_frame_bottom" type="capsule" fromto=".25 -.13 0 .61 -.13 0" size=".008" />
+              <geom name="racket_frame_tip" type="capsule" fromto=".61 -.13 0 .61 .13 0" size=".008" />
+              <geom name="racket_frame_throat" type="capsule" fromto=".25 -.13 0 .25 .13 0" size=".008" />
+            </body>
+          </body>
+        </body>
+      </body>
+      <inertial pos="0 0 0" mass="60" diaginertia="8 5 8" />
+    </body>
+    <body name="player1_torso" pos="-.2 1.45 -7.8" quat="0 0 1 0">
+      <joint name="player1_movement_x" type="slide" axis="-1 0 0" range="-5.0 5.4" damping="0" armature="0" />
+      <joint name="player1_movement_z" type="slide" axis="0 0 -1" range="-5.085 7.15" damping="0" armature="0" />
+      <geom name="player1_support" type="capsule" fromto="0 -.95 0 0 0 0" size=".10" />
+      <body name="player1_upper_arm">
+        <joint name="player1_shoulder_yaw" axis="0 1 0" range="-1.3 1.3" />
+        <joint name="player1_shoulder_pitch" axis="0 0 1" range="-1.4 .8" />
+        <joint name="player1_shoulder_axial" axis="1 0 0" range="-1.2 1.2" />
+        <inertial pos=".15 0 0" mass="1.8" diaginertia=".003 .018 .018" />
+        <geom name="player1_upper_arm_shape" type="capsule" fromto="0 0 0 .30 0 0" size=".045" />
+        <body name="player1_forearm" pos=".30 0 0">
+          <joint name="player1_elbow" axis="0 1 0" range="0 2.269" />
+          <joint name="player1_forearm_roll" axis="1 0 0" range="-.7853981633974483 .7853981633974483" />
+          <inertial pos=".14 0 0" mass="1.1" diaginertia=".002 .009 .009" />
+          <geom name="player1_forearm_shape" type="capsule" fromto="0 0 0 .28 0 0" size=".035" />
+          <body name="player1_hand" pos=".28 0 0">
+            <joint name="player1_wrist_bend" axis="0 1 0" range="-.5235987755982988 .5235987755982988" />
+            <inertial pos="0 0 0" mass=".16" diaginertia=".0000328 .0000928 .0001000" />
+            <body name="player1_racket" quat=".984807753 .173648178 0 0">
+              <inertial pos=".30 0 0" mass=".32" diaginertia=".003 .014 .015" />
+              <geom name="player1_racket_handle" type="capsule" fromto="0 0 0 .24 0 0" size=".015" />
+              <geom name="player1_stringbed" type="box" pos=".43 0 0" size=".18 .125 .004" rgba=".7 .85 .9 .3" />
+              <geom name="player1_racket_frame_top" type="capsule" fromto=".25 .13 0 .61 .13 0" size=".008" />
+              <geom name="player1_racket_frame_bottom" type="capsule" fromto=".25 -.13 0 .61 -.13 0" size=".008" />
+              <geom name="player1_racket_frame_tip" type="capsule" fromto=".61 -.13 0 .61 .13 0" size=".008" />
+              <geom name="player1_racket_frame_throat" type="capsule" fromto=".25 -.13 0 .25 .13 0" size=".008" />
+            </body>
+          </body>
+        </body>
+      </body>
+      <inertial pos="0 0 0" mass="60" diaginertia="8 5 8" />
+    </body>
+    <body name="ball" pos="1.21 1.78 3.5">
+      <freejoint name="ball_free" />
+      <inertial pos="0 0 0" mass=".057" diaginertia=".000041382 .000041382 .000041382" />
+      <geom name="ball_geom" type="sphere" size=".033" rgba=".8 1 .05 1" fluidshape="ellipsoid" fluidcoef=".2535 .25 1 1 1" />
+    </body>
+  </worldbody>
+  <contact>
+    <pair geom1="ball_geom" geom2="stringbed" condim="3" friction=".7 .7 .001 .0001 .0001" solref="-500000 -50" solimp=".95 .95 .001" />
+    <pair geom1="ball_geom" geom2="court" condim="3" friction=".6 .6 .001 .0001 .0001" solref="-80000 -70" solimp=".95 .95 .001" />
+    <pair geom1="ball_geom" geom2="net" condim="3" friction=".4 .4 .001 .0001 .0001" solref="-3000 -80" solimp=".95 .95 .001" />
+    <pair geom1="ball_geom" geom2="racket_frame_top" condim="3" friction=".3 .3 .001 .0001 .0001" solref="-100000 -80" />
+    <pair geom1="ball_geom" geom2="racket_frame_bottom" condim="3" friction=".3 .3 .001 .0001 .0001" solref="-100000 -80" />
+    <pair geom1="ball_geom" geom2="racket_frame_tip" condim="3" friction=".3 .3 .001 .0001 .0001" solref="-100000 -80" />
+    <pair geom1="ball_geom" geom2="racket_frame_throat" condim="3" friction=".3 .3 .001 .0001 .0001" solref="-100000 -80" />
+    <pair geom1="ball_geom" geom2="player1_stringbed" condim="3" friction=".7 .7 .001 .0001 .0001" solref="-500000 -50" solimp=".95 .95 .001" />
+    <pair geom1="ball_geom" geom2="player1_racket_frame_top" condim="3" friction=".3 .3 .001 .0001 .0001" solref="-100000 -80" />
+    <pair geom1="ball_geom" geom2="player1_racket_frame_bottom" condim="3" friction=".3 .3 .001 .0001 .0001" solref="-100000 -80" />
+    <pair geom1="ball_geom" geom2="player1_racket_frame_tip" condim="3" friction=".3 .3 .001 .0001 .0001" solref="-100000 -80" />
+    <pair geom1="ball_geom" geom2="player1_racket_frame_throat" condim="3" friction=".3 .3 .001 .0001 .0001" solref="-100000 -80" />
+  </contact>
+  <actuator>
+    <motor name="shoulder_yaw_motor" joint="shoulder_yaw" ctrlrange="-65 65" />
+    <motor name="shoulder_pitch_motor" joint="shoulder_pitch" ctrlrange="-65 65" />
+    <motor name="elbow_motor" joint="elbow" ctrlrange="-40 40" />
+    <motor name="shoulder_axial_motor" joint="shoulder_axial" ctrlrange="-20 20" />
+    <motor name="forearm_roll_motor" joint="forearm_roll" ctrlrange="-8 8" />
+    <motor name="wrist_bend_motor" joint="wrist_bend" ctrlrange="-6 6" />
+    <motor name="player1_shoulder_yaw_motor" joint="player1_shoulder_yaw" ctrlrange="-65 65" />
+    <motor name="player1_shoulder_pitch_motor" joint="player1_shoulder_pitch" ctrlrange="-65 65" />
+    <motor name="player1_elbow_motor" joint="player1_elbow" ctrlrange="-40 40" />
+    <motor name="player1_shoulder_axial_motor" joint="player1_shoulder_axial" ctrlrange="-20 20" />
+    <motor name="player1_forearm_roll_motor" joint="player1_forearm_roll" ctrlrange="-8 8" />
+    <motor name="player1_wrist_bend_motor" joint="player1_wrist_bend" ctrlrange="-6 6" />
+    <motor name="movement_x_motor" joint="movement_x" ctrlrange="-700 700" />
+    <motor name="movement_z_motor" joint="movement_z" ctrlrange="-700 700" />
+    <motor name="player1_movement_x_motor" joint="player1_movement_x" ctrlrange="-700 700" />
+    <motor name="player1_movement_z_motor" joint="player1_movement_z" ctrlrange="-700 700" />
+  </actuator>
+  <keyframe>
+    <key name="ready" qvel="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 18 0 0 0" />
+  </keyframe>
+</mujoco>

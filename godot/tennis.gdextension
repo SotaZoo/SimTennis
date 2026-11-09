@@ -1,0 +1,17 @@
+[configuration]
+entry_symbol = "tennis_library_init"
+compatibility_minimum = "4.5"
+reloadable = false
+
+[libraries]
+macos.debug.arm64 = "res://bin/libtennis.template_debug.dylib"
+macos.release.arm64 = "res://bin/libtennis.template_release.dylib"
+macos.debug.x86_64 = "res://bin/libtennis.template_debug.dylib"
+macos.release.x86_64 = "res://bin/libtennis.template_release.dylib"
+linux.debug.x86_64 = "res://bin/libtennis.template_debug.so"
+linux.release.x86_64 = "res://bin/libtennis.template_release.so"
+
+[dependencies]
+macos.arm64 = { "res://bin/libmujoco.3.12.0.dylib": "" }
+macos.x86_64 = { "res://bin/libmujoco.3.12.0.dylib": "" }
+linux.x86_64 = { "res://bin/libmujoco.so.3.12.0": "" }
