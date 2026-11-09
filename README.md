@@ -61,6 +61,9 @@ uv run python tools/build_return_policy.py
 Download [simtennis-demo.tar.gz](https://github.com/SotaZoo/SimTennis/releases/download/v0.1.0/simtennis-demo.tar.gz) and extract it into the repository
 root. It supplies the `demo/` directory with recorded contests and checkpoints.
 
+Load only checkpoints from this official release or another trusted source.
+Stable-Baselines3 checkpoints use pickle deserialization, which can execute code.
+
 ```sh
 tar -xzf simtennis-demo.tar.gz
 uv run python -m simtennis replay demo/after.json
